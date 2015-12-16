@@ -1,0 +1,23 @@
+---
+{{ ansible_managed }}
+input:
+  # In seconds, defines how often to read server statistics
+  period: 10
+
+  # Regular expression to match the processes that are monitored
+  # By default, all the processes are monitored
+  procs: [".*"]
+
+  # Statistics to collect (all enabled by default)
+  stats:
+    system: true
+    proc: true
+    filesystem: true
+
+output:
+  elasticsearch:
+    hosts: ["{{ topbeat_elasticsearch_host }}:{{ topbeat_elasticsearch_port }}"]
+
+logging:
+  files:
+    rotateeverybytes: 10485760 # = 10MB
