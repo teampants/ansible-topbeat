@@ -1,3 +1,6 @@
 ---
-topbeat_elasticsearch_host: localhost
-topbeat_elasticsearch_port: 9200
+topbeat_elasticsearch_url: 'http://localhost:9200'
+topbeat_logstash_host: localhost
+topbeat_logstash_beats_port: 5044
+topbeat_output_elasticsearch: true
+topbeat_output_logstash: false
