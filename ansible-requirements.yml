@@ -1,0 +1,3 @@
+---
+- src: tersmitten.pip
+  version: "v1.2.0"
