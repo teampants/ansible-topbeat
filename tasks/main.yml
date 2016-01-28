@@ -1,0 +1,50 @@
+---
+- include: debian.yml
+  when: ansible_os_family == 'Debian'
+
+- name: Install httplib2
+  pip:
+    name: httplib2
+
+- name: Check existence of topbeat index template
+  uri:
+    url: "{{ topbeat_elasticsearch_url }}/_template/topbeat"
+    method: HEAD
+    status_code:
+      - 200
+      - 404
+  register: topbeat_index_template_check
+  when: topbeat_output_elasticsearch == true
+
+- name: Fetch index template file
+  fetch:
+    src: "/etc/topbeat/topbeat.template.json"
+    dest: "/tmp/ansible_fetch/topbeat.template.json"
+    fail_on_missing: true
+    flat: true
+  when: topbeat_output_elasticsearch == true and topbeat_index_template_check.status == 404
+
+- name: Create elasticsearch index template for topbeat
+  uri:
+    url: "{{ topbeat_elasticsearch_url }}/_template/topbeat"
+    method: PUT
+    body: "{{ lookup('file','/tmp/ansible_fetch/topbeat.template.json') }}"
+    status_code: 200
+  when: topbeat_output_elasticsearch == true and topbeat_index_template_check.status == 404
+  notify:
+    - restart topbeat
+
+- name: Enable topbeat at boot
+  service:
+    name: topbeat
+    enabled: yes
+  notify:
+    - restart topbeat
+
+- name: Configure topbeat
+  template:
+    src: "topbeat.yml.j2"
+    dest: "/etc/topbeat/topbeat.yml"
+  notify: restart topbeat
+
+
