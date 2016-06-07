@@ -4,3 +4,4 @@ topbeat_logstash_host: localhost
 topbeat_logstash_beats_port: 5044
 topbeat_output_elasticsearch: true
 topbeat_output_logstash: false
+topbeat_period_seconds: 10
