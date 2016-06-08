@@ -2,7 +2,7 @@
 {{ ansible_managed }}
 input:
   # In seconds, defines how often to read server statistics
-  period: 10
+  period: {{ topbeat_period_seconds }}
 
   # Regular expression to match the processes that are monitored
   # By default, all the processes are monitored
