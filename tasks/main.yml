@@ -29,6 +29,7 @@
     url: "{{ topbeat_elasticsearch_url }}/_template/topbeat"
     method: PUT
     body: "{{ lookup('file','/tmp/ansible_fetch/topbeat.template.json') }}"
+    body_format: json
     status_code: 200
   when: topbeat_output_elasticsearch == true and topbeat_index_template_check.status == 404
   notify:
